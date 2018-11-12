@@ -12,8 +12,23 @@ var spotify = require('spotify')
 var liriCmd = process.argv[2]
 var term = process.argv.slice(3).join(" ")
 
-if (liriCmd = "spotify-this-song") {
-    spotifySearch(term)
+if (liriCmd === "spotify-this-song") {
+    var songName = term
+    spotifySearch(songName)
+}
+else if (liriCmd === "movie-this") {
+    var movieName = term
+    getMovie(movieName)
+}
+else if (liriCmd === "concert-this") {
+    var artistName = term
+    getConcert(artistName)
+}
+else if (liriCmd === "do-what-it-says") {
+    logParser();
+}
+else {
+    console.log("HEY! That's not a command!")
 }
 
 
@@ -21,10 +36,13 @@ function spotifySearch() {
   
 var spotify = new Spotify(keys.spotify);
 
+if (!songName) {
+    songName = "Ace of Base";
+}
   var divider =
     "\n------------------------------------------------------------\n\n";
 
-spotify.search({ type: 'track', query: term })
+spotify.search({ type: 'track', query: songName })
   .then(function(response) {
     console.log(divider)
     console.log(response.tracks.items[0].album.name)
@@ -33,10 +51,76 @@ spotify.search({ type: 'track', query: term })
     
   })
   .catch(function(err) {
-    console.log(err);
+    console.log("Something went wrong" + err);
   });
 }
 
+function getMovie() {
+
+    if (!movieName) {
+        movieName = "Mr Nobody";
+    }
+
+    var URL = "http://www.omdbapi.com/?t=" + movieName + "&plot=short&apikey=12ce2cb2"
+
+    axios.get(URL).then(function(response) {
+        
+        var jsonData = response.data;
+
+        var showData = [
+        "Name: " + jsonData.Title,
+        "Year: " + jsonData.Year,
+        "Rating: " + jsonData.Rated,
+        "Network: " + jsonData.imdbRating,
+        "Summary: " + jsonData.Country,
+        "Language: " + jsonData.Language, 
+        'Plot: ' + jsonData.Plot +
+        'Actors: ' + jsonData.Actors +
+        'Rotten Rating: ' + jsonData.Ratings[1].Value 
+
+    ].join("\n\n");
+
+    console.log(showData)
+    })
+}
+
+function getConcert () {
+
+    var URL = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp"
+    
+    axios.get(URL).then(function(response) {
+    
+        var divider =
+        "\n------------------------------------------------------------\n\n";
+
+        var jsonData = response.data;
+
+        var showData = [
+        "Name: " + jsonData[0].venue.name,
+        "Country: " + jsonData[0].venue.country,
+        "City: " + jsonData[0].venue.city,
+        "Date " + jsonData[0].datetime
+        ].join("\n\n");
+        console.log(divider,showData)
+    })
+}
+
+function logParser () {
+
+    fs.readFile("./random.txt", "utf8", function(error, data) {
+        
+        if (error) {
+            return console.log(error);
+          }
+        
+        
+          var dataArr = data.split(",");
+        
+          songName = dataArr.slice(0).join(" ")
+          spotifySearch(songName)
+
+    });
+}
 
 //   // findShow takes in the name of a tv show and searches the tvmaze API
 //   this.findShow = function(show) {
