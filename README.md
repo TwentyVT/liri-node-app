@@ -4,16 +4,16 @@
 
 ### spotify-this-song
 
-![Spotifier](https://imgur.com/9dCCPTV)
+[Spotifier](./images/spotify-this-song.PNG)
 
 ### concert-this
 
-![Concert-er](https://imgur.com/FMSJzll)
+[Concert-er](./images/concert-this.PNG)
 
 ### movie-this
 
-![Movie-er](https://imgur.com/xJ4i015)
+[Movie-er](./images/movie-this.PNG)
 
 ### do-what-it-says
 
-![Do-er](https://imgur.com/LeLvsJm)
+[Do-er](./images/do-what-it-says.PNG)
